@@ -16,11 +16,26 @@ async function getQuote() {
     }
 
 
+async function splitString(string) {
+    let stringArray = [];
+    let stringLength = string.length;
+    let stringArrayLength = Math.ceil(stringLength/25);
+    for (let i = 0; i < stringArrayLength; i++) {
+        let stringSubstring = string.substring(i*25, (i+1)*25);
+        stringArray.push(stringSubstring);
+    }
+    console.log(stringArray);
+    return stringArray;
+}
+
+
+
     async function buildImage() {
         let fetchedData = await getQuote();
-
-        
         let todaysQuote = fetchedData[0];
+        todaysQuote = await splitString(todaysQuote);
+        console.log(todaysQuote);
+        
         let todaysAuthor = fetchedData[1];
         todaysAuthor = "- " + todaysAuthor;
 
@@ -39,19 +54,20 @@ async function getQuote() {
             var textWidth2 = Jimp.measureText(font, todaysAuthor);
             var textHeight2 = Jimp.measureTextHeight(font, todaysAuthor);
             image
+
               .print(font, w/2 - textWidth/2, h/2 - textHeight/2 - 50,
                 {   
                 text: todaysQuote,
                 }, textWidth, textHeight)
                 .print(font, w/2 - textWidth2/2, textHeight2/2 + h/2 + 500,
+
+
                 {   
                 text: todaysAuthor,
                 }, textWidth2, textHeight2)
               .write('todaysPost.jpg'); // save
           }); 
         });
-      
-      
       }
 
 
