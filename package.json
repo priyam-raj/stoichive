@@ -1,0 +1,11 @@
+{
+  "name": "stoichive",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js"
+  },
+  "author": "Priyam Raj",
+  "license": "ISC"
+}
