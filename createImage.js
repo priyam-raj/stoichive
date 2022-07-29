@@ -1,9 +1,6 @@
 import fetch from "node-fetch";
 import Jimp from "jimp";
 
-
-
-
 async function getQuote() {
     let todaysData = await fetch("https://stoicquotesapi.com/v1/api/quotes/random")
       .then((res) => res.json())
@@ -18,7 +15,7 @@ async function getQuote() {
     }
 
 
-function splitString(string) {
+async function splitString(string) {
     let stringArray = string.split(" ");
     let newArray = [];
     let tempString = "";
@@ -31,7 +28,6 @@ function splitString(string) {
     }
     newArray.push(tempString);
     return newArray;
-
 }
 
 
@@ -39,11 +35,10 @@ function splitString(string) {
     async function buildImage() {
         let fetchedData = await getQuote();
         let todaysQuote = fetchedData[0];
+        let rawQuote = fetchedData[0];
         todaysQuote = await splitString(todaysQuote);
         let todaysAuthor = fetchedData[1];
         todaysAuthor = "- " + todaysAuthor;
-
-        console.log(todaysQuote + todaysAuthor);
             
         const font = `assets/philosopher.fnt`;
 
@@ -58,7 +53,7 @@ function splitString(string) {
             for (let i = 0; i < todaysQuote.length; i++) {
               var textHeight = Jimp.measureTextHeight(font, todaysQuote[i]);
               var textWidth = Jimp.measureText(font, todaysQuote[i]);
-                image.print(font, w/2 - textWidth/2, h/5 - textHeight/2 + i*textHeight, todaysQuote[i]);
+                image.print(font, w/2 - textWidth/2, h/6 + 100 - textHeight/2 + i*textHeight, todaysQuote[i]);
             }
                 image.print(font, w/2 - textWidth2/2, textHeight2/2 + h/2 + 500,
                 {   
@@ -67,7 +62,11 @@ function splitString(string) {
               .write('todaysPost.jpg'); // save
           }); 
         });
+
+
+        return [rawQuote, todaysAuthor];
+
       }
 
 
-      buildImage()
+export { buildImage };
