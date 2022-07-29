@@ -32,7 +32,7 @@ async function tweetNow() {
   const stoichive = client.readWrite;
 
   let caption = await buildImage();
-  caption = `"${caption[0]}" ${caption[1]}`;
+  caption = `"${caption[0]}"\n${caption[1]}`;
 
   const tweet = async () => {
     try {
@@ -55,7 +55,7 @@ async function instagramPost() {
     const ig = new IgApiClient();
 
     let caption = await buildImage();
-    caption = `"${caption[0]}" ${caption[1]}\n\n#stoic #stoicism #philosophy #stoicphilosophy #marcusaurelius #wisdom #dailystoic #seneca #stoicmindset #stoicquotes #epictetus #philosopher #philosophyquotes #mindset #motivation #quotes #stoics #psychology #socrates #stoiclife #selfimprovement #meditation #carljung #masculinity #lawsofpower #quoteoftheday #life #jordanpeterson #discipline #nietzsche`;
+    caption = `"${caption[0]}"\n${caption[1]}\n\n#stoic #stoicism #philosophy #stoicphilosophy #marcusaurelius #wisdom #dailystoic #seneca #stoicmindset #stoicquotes #epictetus #philosopher #philosophyquotes #mindset #motivation #quotes #stoics #psychology #socrates #stoiclife #selfimprovement #meditation #carljung #masculinity #lawsofpower #quoteoftheday #life #jordanpeterson #discipline #nietzsche`;
     ig.state.generateDevice(username);
     const user = await ig.account.login(username, password);
     const path = `todaysPost.jpg`;
@@ -79,5 +79,8 @@ let dailyPost = new CronJob(
   true
 );
 
+
+// Test post once on startup.
 await instagramPost();
+
 dailyPost.start();
