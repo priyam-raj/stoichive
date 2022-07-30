@@ -30,7 +30,7 @@ async function tweetNow() {
 
   console.log("Tweeting begins..");
 
-  let caption = await getQuote();
+  let caption = await buildImage();
 
     const client = new TwitterApi({
       appKey: process.env.CONSUMER_KEY,
@@ -66,7 +66,7 @@ async function instagramPost() {
     // Instagram client
     const { username, password } = process.env;
     const ig = new IgApiClient();
-    let caption = await getQuote();
+    let caption = await buildImage();
     caption = `"${caption[0]}"\n${caption[1]}\n\n#stoic #stoicism #philosophy #stoicphilosophy #marcusaurelius #wisdom #dailystoic #seneca #stoicmindset #stoicquotes #epictetus #philosopher #philosophyquotes #mindset #motivation #quotes #stoics #psychology #socrates #stoiclife #selfimprovement #meditation #carljung #masculinity #lawsofpower #quoteoftheday #life #jordanpeterson #discipline #nietzsche`;
     ig.state.generateDevice(username);
     const user = await ig.account.login(username, password);
@@ -86,14 +86,11 @@ let dailyPost = new CronJob(
   "0 */4 * * *",
   async function () {
     console.log("Auto post begins");
-    await buildImage();
     await instagramPost();
-    await tweetNow();
+    await timeout(3000);
+    tweetNow();
   },
   true
 );
 
-
-
-buildImage();
 dailyPost.start();
