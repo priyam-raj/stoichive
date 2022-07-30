@@ -27,6 +27,8 @@ function timeout(ms) {
   
 
 async function tweetNow() {
+  let caption = await buildImage();
+
     const client = new TwitterApi({
       appKey: process.env.CONSUMER_KEY,
       appSecret: process.env.CONSUMER_SECRET,
@@ -36,13 +38,12 @@ async function tweetNow() {
   
   const stoichive = client.readWrite;
 
-  let caption = await buildImage();
   caption = `"${caption[0]}"\n${caption[1]}`;   
   const imagePath = `todaysPost.jpg`
 
   const tweet = async () => {
     try { 
-      await timeout(2500);
+      await timeout(3000);
       const mediaId = await client.v1.uploadMedia(imagePath);
       await stoichive.v2.tweet(caption, {
         media: { media_ids: [mediaId] },
