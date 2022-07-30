@@ -11,36 +11,43 @@ const app = express();
 const readFileAsync = promisify(readFile);
 dotenv.config();
 
-app.use(express.static("public"));
-app.listen(process.env.PORT || 3000, function () {
+  app.use(express.static("public"));
+  app.listen(process.env.PORT || 3000, function () {
   });
 
   app.get("/", function (request, response) {
     response.send('stoichive is currently up and running <br><br> - Instagram @stoichive<br> - Twitter @stoichive (soon)');
   });
+
+  // Set 3 second delay (For compressions and resizes.)
+function timeout(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
   
 
 async function tweetNow() {
-  // Twitter client
-  const client = new TwitterApi({
-    appKey: process.env.CONSUMER_KEY,
-    appSecret: process.env.CONSUMER_SECRET,
-    accessToken: process.env.ACCESS_TOKEN,
-    accessSecret: process.env.ACCESS_TOKEN_SECRET,
-  });
-
+    const client = new TwitterApi({
+      appKey: process.env.CONSUMER_KEY,
+      appSecret: process.env.CONSUMER_SECRET,
+      accessToken: process.env.ACCESS_TOKEN,
+      accessSecret: process.env.ACCESS_TOKEN_SECRET,
+    });
+  
   const stoichive = client.readWrite;
 
   let caption = await buildImage();
-  caption = `"${caption[0]}"\n${caption[1]}`;
+  caption = `"${caption[0]}"\n${caption[1]}`;   
+  let imagePath = `todaysPost.jpg`
 
   const tweet = async () => {
-    try {
-      const mediaId = await client.v1.uploadMedia(`todaysPost.jpg`);
-      await timenitedaily.v2.tweet(caption, {
+    try { 
+      await timeout(500);
+      const mediaId = await client.v1.uploadMedia(imagePath);
+      await stoichive.v2.tweet(caption, {
         media: { media_ids: [mediaId] },
       });
-      console.log("And now just tweeted.");
+      console.log("And now tweeted.");
     } catch (e) {
       console.log(e);
     }
@@ -75,6 +82,7 @@ let dailyPost = new CronJob(
   async function () {
     console.log("Auto post begins");
     await instagramPost();
+    await tweetNow();
   },
   true
 );
@@ -82,5 +90,6 @@ let dailyPost = new CronJob(
 
 // Test post once on startup.
 await instagramPost();
+await tweetNow();
 
 dailyPost.start();
