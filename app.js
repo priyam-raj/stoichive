@@ -31,6 +31,10 @@ async function tweetNow() {
   console.log("Tweeting begins..");
 
   let caption = await buildImage();
+  caption = `"${caption[0]}"\n${caption[1]}`; 
+  
+  await timeout(3000);
+
 
     const client = new TwitterApi({
       appKey: process.env.CONSUMER_KEY,
@@ -41,9 +45,7 @@ async function tweetNow() {
   
   const stoichive = client.readWrite;
 
-  await timeout(3000);
 
-  caption = `"${caption[0]}"\n${caption[1]}`;   
   const imagePath = `todaysPost.jpg`
 
   const tweet = async () => {
