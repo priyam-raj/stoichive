@@ -7,7 +7,7 @@ posts stoic quotes to social media on every 4-hours.
 
 
 - Instagram [@stoichive](https://www.instagram.com/stoichive/)
-- Twitter [@stoichive](https://www.twitter.com/stoichive/) (soon)
+- Twitter [@stoichive](https://www.twitter.com/stoichive/) 
 
 <br>
 
