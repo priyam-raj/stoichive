@@ -81,13 +81,13 @@ async function instagramPost() {
   }
 }
 
-// Run every day at 7:30 PM IST UTC
+// Run 4 times a day.
 let dailyPost = new CronJob(
   "0 */4 * * *",
   async function () {
     console.log("Auto post begins");
     await instagramPost();
-    await timeout(3000);
+    await timeout(10000);
     tweetNow();
   },
   true
