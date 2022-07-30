@@ -89,5 +89,5 @@ let dailyPost = new CronJob(
 
 // Test post once on startup.
 await tweetNow();
-// await instagramPost();
+await instagramPost();
 dailyPost.start();
