@@ -16,7 +16,7 @@ dotenv.config();
   });
 
   app.get("/", function (request, response) {
-    response.send('stoichive is currently up and running <br><br> - Instagram @stoichive<br> - Twitter @stoichive (soon)');
+    response.send('stoichive is currently up and running <br><br> - Instagram @stoichive<br> - Twitter @stoichive');
   });
 
   // Set 3 second delay (For compressions and resizes.)
@@ -42,7 +42,7 @@ async function tweetNow() {
 
   const tweet = async () => {
     try { 
-      await timeout(500);
+      await timeout(1000);
       const mediaId = await client.v1.uploadMedia(imagePath);
       await stoichive.v2.tweet(caption, {
         media: { media_ids: [mediaId] },
@@ -89,7 +89,6 @@ let dailyPost = new CronJob(
 
 
 // Test post once on startup.
-await instagramPost();
 await tweetNow();
-
+await instagramPost();
 dailyPost.start();
