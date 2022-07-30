@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import { TwitterApi } from "twitter-api-v2";
 import { IgApiClient } from "instagram-private-api";
 import { promisify } from "util";
-import { buildImage } from "./createImage.js";
+import { buildImage, getQuote } from "./createImage.js";
 import { readFile } from "fs";
 
 const app = express();
@@ -27,7 +27,11 @@ function timeout(ms) {
   
 
 async function tweetNow() {
-  let caption = await buildImage();
+
+  console.log("Tweeting begins..");
+
+  let caption = await getQuote();
+
     const client = new TwitterApi({
       appKey: process.env.CONSUMER_KEY,
       appSecret: process.env.CONSUMER_SECRET,
@@ -48,7 +52,7 @@ async function tweetNow() {
       await stoichive.v2.tweet(caption, {
         media: { media_ids: [mediaId] },
       });
-      console.log("And now tweeted.");
+      console.log("Tweeted to Twitter!");
     } catch (e) {
       console.log(e);
     }
@@ -58,10 +62,11 @@ async function tweetNow() {
 
 async function instagramPost() {
   try {
+    console.log("Posting to Instagram begins..");
     // Instagram client
     const { username, password } = process.env;
     const ig = new IgApiClient();
-    let caption = await buildImage();
+    let caption = await getQuote();
     caption = `"${caption[0]}"\n${caption[1]}\n\n#stoic #stoicism #philosophy #stoicphilosophy #marcusaurelius #wisdom #dailystoic #seneca #stoicmindset #stoicquotes #epictetus #philosopher #philosophyquotes #mindset #motivation #quotes #stoics #psychology #socrates #stoiclife #selfimprovement #meditation #carljung #masculinity #lawsofpower #quoteoftheday #life #jordanpeterson #discipline #nietzsche`;
     ig.state.generateDevice(username);
     const user = await ig.account.login(username, password);
@@ -70,7 +75,7 @@ async function instagramPost() {
       file: await readFileAsync(path),
       caption: caption,
     });
-    console.log("And now posted to Instagram.");
+    console.log("Posted to Instagram!");
   } catch (error) {
     console.log(error);
   }
@@ -81,6 +86,7 @@ let dailyPost = new CronJob(
   "0 */4 * * *",
   async function () {
     console.log("Auto post begins");
+    await buildImage();
     await instagramPost();
     await tweetNow();
   },
@@ -88,6 +94,6 @@ let dailyPost = new CronJob(
 );
 
 
-// Test post once on startup.
-await tweetNow();
+
+buildImage();
 dailyPost.start();

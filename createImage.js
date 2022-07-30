@@ -1,7 +1,15 @@
 import fetch from "node-fetch";
 import Jimp from "jimp";
 
+
+  // Set 3 second delay (For compressions and resizes.)
+  function timeout(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+  
+
 async function getQuote() {
+  console.log('Fetching a quote..');
     let todaysData = await fetch("https://stoicquotesapi.com/v1/api/quotes/random")
       .then((res) => res.json())
       .then((json) => {
@@ -16,11 +24,13 @@ async function getQuote() {
 
 
 async function splitString(string) {
+  console.log('Checking if the quote has more than 30 characters..');
     let stringArray = string.split(" ");
     let newArray = [];
     let tempString = "";
     for (let i = 0; i < stringArray.length; i++) {
         if (tempString.length + stringArray[i].length + 1 > 30) {
+          console.log('\nWell it does..\n');
             newArray.push(tempString);
             tempString = "";
         }
@@ -33,6 +43,7 @@ async function splitString(string) {
 
 
     async function buildImage() {
+      console.log('Now constructing image..');
         let fetchedData = await getQuote();
         let todaysQuote = fetchedData[0];
         let rawQuote = fetchedData[0];
@@ -60,13 +71,15 @@ async function splitString(string) {
                 text: todaysAuthor,
                 }, textWidth2, textHeight2)
               .write('todaysPost.jpg'); // save
+              console.log(`An image quote has been constructed!`);
           }); 
         });
 
+        await timeout(1000);
 
         return [rawQuote, todaysAuthor];
 
       }
 
 
-export { buildImage };
+export { buildImage, getQuote };
