@@ -88,8 +88,8 @@ let dailyPost = new CronJob(
   "00 00 */4 * * *",
   function () {
     console.log("Auto post to Instagram begins..");
-    tweetNow();
-  },
+    instagramPost();
+    },
   true
 );
 
@@ -103,6 +103,8 @@ let dailyTweet = new CronJob(
   },
   true
 );
+
+
 
 
 dailyTweet.start();
