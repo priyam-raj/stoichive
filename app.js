@@ -106,6 +106,6 @@ let dailyTweet = new CronJob(
 
 
 
-
 dailyTweet.start();
 dailyPost.start();
+console.log('Successfully started, now tweeting and posting to Instagram!');
