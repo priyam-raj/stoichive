@@ -83,16 +83,27 @@ async function instagramPost() {
   }
 }
 
-// Run 4 times a day.
+// Run on ever 4-hour duration
 let dailyPost = new CronJob(
-  "0 */4 * * *",
-  async function () {
-    console.log("Auto post begins");
-    await instagramPost();
-    await timeout(10000);
+  "00 00 */4 * * *",
+  function () {
+    console.log("Auto post to Instagram begins..");
     tweetNow();
   },
   true
 );
 
+
+// Run on ever 4-hour and 5-minutes duration
+let dailyTweet = new CronJob(
+  "00 05 */4 * * *",
+  function () {
+    console.log("Auto Tweet begins..");
+    tweetNow();
+  },
+  true
+);
+
+
+dailyTweet.start();
 dailyPost.start();
