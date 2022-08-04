@@ -1,5 +1,5 @@
 # stoichive
-posts stoic quotes to social media every 4-hours.
+Generates images with stoic quotes and posts it to social media every 4-hours.
 
 
 <img width=480px src="https://raw.githubusercontent.com/priyam-raj/stoichive/master/assets/stoichiveCover.jpg">
